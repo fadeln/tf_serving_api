@@ -7,19 +7,9 @@
 </head>
 <body>
     <h1>Image Upload</h1>
-    <form id="upload-form" method="POST" enctype="multipart/form-data">
+    <form id="upload-form" method="POST" enctype="multipart/form-data" action="/predict">
         <input type="file" name="file" accept="image/*">
         <button type="submit">Upload</button>
     </form>
-    <div id="result">
-        {% if translated_predictions %}
-        <h2>Predictions:</h2>
-        <ul>
-            {% for prediction in translated_predictions %}
-            <li>{{ prediction.name }} - Calories: {{ prediction.nutrition.calories }}, Fiber: {{ prediction.nutrition.fiber }}, Sugar: {{ prediction.nutrition.sugar }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-    </div>
 </body>
 </html>

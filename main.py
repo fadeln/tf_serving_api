@@ -1,7 +1,7 @@
 # special thanks to chatgpt
 from typing import Union
-from fastapi import FastAPI, File, UploadFile
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, File, Request, UploadFile
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 import httpx
 import my_module
@@ -12,13 +12,13 @@ app = FastAPI()
 csv_file_path = "class_data.csv"
 label_mapping = my_module.read_label_mappings_from_csv(csv_file_path)
 
-@app.get("/version")
-async def check_model():
-    response= httpx.get('http://localhost:8601/v1/models/my_simple_model/versions/2')
+# Template folder path
+templates = Jinja2Templates(directory=".")
 
-    return response.json()
 
-@app.post('/')
+@app.get("/", response_class=HTMLResponse)
+async def index(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 @app.post('/predict')
 async def predict(file: UploadFile):
@@ -39,3 +39,9 @@ async def predict(file: UploadFile):
         translated_predictions.append(translated_prediction)
 
     return {"translated_predictions": translated_predictions}
+
+@app.get("/version")
+async def check_model():
+    response= httpx.get('http://localhost:8601/v1/models/my_simple_model/versions/2')
+
+    return response.json()
