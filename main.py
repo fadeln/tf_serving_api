@@ -13,8 +13,7 @@ csv_file_path = "class_data.csv"
 label_mapping = my_module.read_label_mappings_from_csv(csv_file_path)
 
 # Template folder path
-templates = Jinja2Templates(directory=".")
-
+templates = Jinja2Templates(directory=".")\
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
@@ -38,7 +37,7 @@ async def predict(file: UploadFile):
         translated_prediction = label_mapping[max_index]
         translated_predictions.append(translated_prediction)
 
-    return {"translated_predictions": translated_predictions}
+    return {"predictions": translated_predictions}
 
 @app.get("/version")
 async def check_model():
